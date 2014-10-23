@@ -3,13 +3,50 @@
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <title>TypeScript HTML App</title>
+    <title>MarkUnpack Sample App</title>
     <link rel="stylesheet" href="app.css" type="text/css" />
-    <script src="app.js"></script>
+
+    <!-- submodules -->
+    <script src="submodules/jszip/dist/jszip.js"></script>
+    <script src="submodules/marked/lib/marked.js"></script>
+    <script src="submodules/promise/Promise.js"></script>
+
+    <script src="markunpack.js"></script>
+
+    <script>
+        function openMarkdown(file) {
+            var extension = getExtension(file.name);
+            var sequence;
+            switch (extension) {
+                case "markpack":
+                    sequence = MarkUnpack.unpack(event.target.files[0]);
+                    break;
+                case "md":
+                case "markdown":
+                    sequence = MarkUnpack.unseal(event.target.files[0]);
+                    break;
+                default:
+                    return alert("Not supported format");
+            }
+            sequence
+                .then(function (result) {
+                    var newwindow = open();
+                    newwindow.document.documentElement.innerHTML = result;
+                }).catch(function (error) { console.error(error.message); });
+        }
+        function getExtension(filename) {
+            var splitted = filename.split('.');
+            if (splitted.length == 1)
+                return "";
+            return splitted[splitted.length - 1];
+        }
+    </script>
 </head>
 <body>
-    <h1>TypeScript HTML App</h1>
+    <h1>MarkUnpack Sample App</h1>
 
-    <div id="content"></div>
+    <div id="content">
+        <input type="file" onchange="openMarkdown(this.files[0])" />
+    </div>
 </body>
 </html>

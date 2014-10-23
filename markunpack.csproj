@@ -23,7 +23,9 @@
     <Content Include="web.config" />
   </ItemGroup>
   <ItemGroup>
-    <TypeScriptCompile Include="markpacked.ts" />
+    <TypeScriptCompile Include="markunpack.ts" />
+    <TypeScriptCompile Include="submodules\jszip.d.ts" />
+    <TypeScriptCompile Include="submodules\marked.d.ts" />
   </ItemGroup>
   <ItemGroup>
     <None Include="web.Debug.config">

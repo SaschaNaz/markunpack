@@ -4,3 +4,6 @@
 [submodule "submodules/jszip"]
 	path = submodules/jszip
 	url = https://github.com/Stuk/jszip.git
+[submodule "submodules/promise"]
+	path = submodules/promise
+	url = https://github.com/taylorhakes/promise-polyfill.git
