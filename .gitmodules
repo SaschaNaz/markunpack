@@ -1,0 +1,6 @@
+[submodule "submodules/marked"]
+	path = submodules/marked
+	url = https://github.com/chjj/marked.git
+[submodule "submodules/jszip"]
+	path = submodules/jszip
+	url = https://github.com/Stuk/jszip.git
