@@ -24,8 +24,11 @@
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="markunpack.ts" />
+    <TypeScriptCompile Include="submodules\domliner\domliner.d.ts" />
+    <TypeScriptCompile Include="submodules\es6-promise.d.ts" />
     <TypeScriptCompile Include="submodules\jszip.d.ts" />
     <TypeScriptCompile Include="submodules\marked.d.ts" />
+    <TypeScriptCompile Include="submodules\prettify.d.ts" />
   </ItemGroup>
   <ItemGroup>
     <None Include="web.Debug.config">

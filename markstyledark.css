@@ -1,0 +1,31 @@
+﻿/* Based on Monokai theme */
+
+/*
+    TODO: Replace current syntax highlighter by ported versions of Monokai themes for GitHub ATOM
+    https://github.com/kevinsawicki/monokai
+    https://github.com/rjfranco/monokai-light
+*/
+
+html {
+    background-color: #272822;
+    color: #f8f8f2;
+}
+
+body {
+    margin: 40px auto 40px auto;
+    max-width: 800px;
+    width: calc(100% - 80px);
+    font-family: sans-serif;
+}
+
+:not(pre) > code {
+    color: #66d9ef;
+}
+
+pre {
+    padding: 10px;
+}
+
+::selection{ 
+    background: #49483E;
+} 

@@ -1,0 +1,23 @@
+﻿body {
+    margin: 40px auto 40px auto;
+    max-width: 800px;
+    width: calc(100% - 80px);
+    font-family: sans-serif;
+}
+
+:not(pre) > code {
+    background-color: #bdbdbd;
+    padding: 1px 5px 1px 5px;
+    border-radius: 5px;
+}
+
+pre {
+    background-color: #272822;
+    padding: 10px;
+    border-radius: 8px;
+}
+
+pre *::selection{ 
+    background: #9d550f;
+    color: #f8f8f0;
+} 
