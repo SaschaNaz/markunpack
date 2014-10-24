@@ -7,7 +7,7 @@
 var MarkUnpack;
 (function (MarkUnpack) {
     var stylesheets = {
-        monokai: downloadStylesheet("submodules/google-prettify-monokai-theme/prettify.css"),
+        monokai: downloadStylesheet("submodules/highlightjs/monokai_sublime.css"),
         markstyle: downloadStylesheet("markstyledark.css")
     };
 
@@ -38,16 +38,12 @@ var MarkUnpack;
     function prettifyCodes(markHTML) {
         var dom = (new DOMParser()).parseFromString(markHTML, "text/html");
         Array.prototype.forEach.call(dom.querySelectorAll("pre > code[class^=lang]"), function (code) {
-            return code.classList.add("prettyprint");
+            return hljs.highlightBlock(code);
         });
         return addStylesheet(dom, "monokai").then(function () {
             return addStylesheet(dom, "markstyle");
         }).then(function () {
-            return new Promise(function (resolve, reject) {
-                prettyPrint(function () {
-                    return resolve(dom.documentElement.innerHTML);
-                }, dom);
-            });
+            return dom.documentElement.innerHTML;
         });
     }
     function addStylesheet(dom, stylename) {

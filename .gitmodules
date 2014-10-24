@@ -7,9 +7,6 @@
 [submodule "submodules/promise"]
 	path = submodules/promise
 	url = https://github.com/taylorhakes/promise-polyfill.git
-[submodule "submodules/google-prettify-monokai-theme"]
-	path = submodules/google-prettify-monokai-theme
-	url = https://github.com/RaphaelDDL/google-prettify-monokai-theme.git
 [submodule "submodules/domliner"]
 	path = submodules/domliner
 	url = https://github.com/SaschaNaz/DOMLiner.git

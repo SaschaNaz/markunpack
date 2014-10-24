@@ -7,7 +7,7 @@
 
 module MarkUnpack {
     var stylesheets: { [key: string]: Promise<string> } = {
-        monokai: downloadStylesheet("submodules/google-prettify-monokai-theme/prettify.css"),
+        monokai: downloadStylesheet("submodules/highlightjs/monokai_sublime.css"),
         markstyle: downloadStylesheet("markstyledark.css")
     };
 
@@ -31,12 +31,10 @@ module MarkUnpack {
         var dom = (new DOMParser()).parseFromString(markHTML, "text/html");
         Array.prototype.forEach.call(
             dom.querySelectorAll("pre > code[class^=lang]"),
-            (code: HTMLElement) => code.classList.add("prettyprint"));
+            (code: HTMLElement) => hljs.highlightBlock(code));
         return addStylesheet(dom, "monokai")
             .then(() => addStylesheet(dom, "markstyle"))
-            .then(() => new Promise<string>((resolve, reject) => {
-                prettyPrint(() => resolve(dom.documentElement.innerHTML), dom);
-            }));
+            .then(() => dom.documentElement.innerHTML);
     }
     function addStylesheet(dom: Document, stylename: string) {
         return stylesheets[stylename]

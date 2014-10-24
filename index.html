@@ -11,7 +11,7 @@
     <script src="submodules/marked/lib/marked.js"></script>
     <script src="submodules/promise/Promise.js"></script>
     <script src="submodules/domliner/domliner.js"></script>
-    <script src="submodules/google-code-prettify/prettify.js"></script>
+    <script src="submodules/highlightjs/highlight.min.js"></script>
 
     <script src="markunpack.js"></script>
 
@@ -21,11 +21,11 @@
             var sequence;
             switch (extension) {
                 case "markpack":
-                    sequence = MarkUnpack.unpack(event.target.files[0]);
+                    sequence = MarkUnpack.unpack(file);
                     break;
                 case "md":
                 case "markdown":
-                    sequence = MarkUnpack.unseal(event.target.files[0]);
+                    sequence = MarkUnpack.unseal(file);
                     break;
                 default:
                     return alert("Not supported format");
