@@ -26,25 +26,8 @@ h1, h2, h3, h4, h5, h6 {
     color: #a6e22e;
 }
 
-ol {
-    counter-reset: item;
-    margin-left: 0;
-    padding-left: 0;
-}
-
-li {
-    display: block;
-    margin-left: 3.5em;          /* Change with margin-left on li:before.  Must be -li:before::margin-left + li:before::padding-right.  (Causes indention for other lines.) */
-}
-
-li:before {
-    content: counter(item) ")";  /* Change 'item' to 'item, upper-roman' or 'item, lower-roman' for upper- and lower-case roman, respectively. */
-    counter-increment: item;
-    display: inline-block;
-    text-align: right;
-    width: 3em;                  /* Must be the maximum width of your list's numbers, including the ')', for compatability (in case you use a fixed-width font, for example).  Will have to beef up if using roman. */
-    padding-right: 0.5em;
-    margin-left: -3.5em;         /* See li comments. */
+li::marker {
+    color: #f92672;
 }
 
 pre {
