@@ -11,62 +11,60 @@ module MarkUnpack {
         markstyle: downloadStylesheet("markstyledark.css")
     };
 
-    function readFileAsArrayBuffer(blob: Blob) {
-        return new Promise<ArrayBuffer>((resolve, reject) => {
-            var reader = new FileReader();
-            reader.onload = () => resolve(reader.result);
-            reader.onerror = (ev) => reject(ev);
-            reader.readAsArrayBuffer(blob);
-        });
-    }
-    function readFileAsText(blob: Blob) {
-        return new Promise<string>((resolve, reject) => {
-            var reader = new FileReader();
-            reader.onload = () => resolve(reader.result);
-            reader.onerror = (ev) => reject(ev);
-            reader.readAsText(blob);
-        });
-    }
-    function prettifyCodes(markHTML: string): Promise<string> {
-        var dom = (new DOMParser()).parseFromString(markHTML, "text/html");
-        Array.prototype.forEach.call(
-            dom.querySelectorAll("pre > code[class^=lang]"),
-            (code: HTMLElement) => hljs.highlightBlock(code));
-        return addStylesheet(dom, "monokai")
-            .then(() => addStylesheet(dom, "markstyle"))
-            .then(() => dom.documentElement.innerHTML);
-    }
     function addStylesheet(dom: Document, stylename: string) {
         return stylesheets[stylename]
             .then((sheet) => dom.head.appendChild((new DOMLiner(dom)).element("style", null, sheet)))
     }
     function downloadStylesheet(src: string) {
-        return new Promise<string>((resolve, reject) => {
-            var xhr = new XMLHttpRequest();
-            xhr.onload = () => resolve(xhr.responseText);
-            xhr.onerror = (e) => reject(e);
-            xhr.open("GET", src);
-            xhr.responseType = "text";
-            xhr.send();
-        });
+        return XMLHttpRequestExtensions.request("GET", src, "text");
     }
-    function markup(markdown: string) {
-        return prettifyCodes(marked(markdown, { gfm: true }));
+
+    function highlightCodes(dom: Document) {
+        Array.prototype.forEach.call(
+            dom.querySelectorAll("pre > code[class^=lang]"),
+            (code: HTMLElement) => hljs.highlightBlock(code));
+        return dom;
+    }
+
+    function markup(markdown: string, resources?: JSZip) {
+        var markHTML = marked(markdown, { gfm: true });
+        var dom = (new DOMParser()).parseFromString(markHTML, "text/html")
+        highlightCodes(dom);
+
+        var sequence = Promise.resolve<any>();
+        if (resources)
+            sequence = sequence.then(() => insertImageDataURL(dom, resources))
+        return sequence
+            .then(() => addStylesheet(dom, "monokai"))
+            .then(() => addStylesheet(dom, "markstyle"))
+            .then(() => dom.documentElement.innerHTML);
     }
     export function unseal(blob: Blob): Promise<string> {
-        return readFileAsText(blob)
+        return FileReaderExtensions.read(blob, "text")
             .then((text) => {
                 return markup(text);
             });
     }
     export function unpack(blob: Blob): Promise<string> {
-        return readFileAsArrayBuffer(blob)
+        return FileReaderExtensions.read(blob, "arraybuffer")
             .then((arraybuffer) => {
                 var jszip = new JSZip(arraybuffer);
                 var main = jszip.file("index.md");
                 if (!main)
                     throw new Error("No index.md file in this markpack.");
-                return markup(main.asText());
+                return markup(main.asText(), jszip.folder("resources"));
             });
+    }
+
+    function insertImageDataURL(dom: Document, resources: JSZip) {
+        var promises: Promise<void>[] = [];
+        Array.prototype.forEach.call(dom.querySelectorAll("img[src^='resources/']"), (img: HTMLImageElement) => {
+            var resource = resources.file(img.getAttribute("src").replace(/^resources\//, ''));
+            if (resource)
+                promises.push(
+                    FileReaderExtensions.read(new Blob([resource.asArrayBuffer()]), "dataurl")
+                        .then((dataurl) => { img.src = dataurl; }));
+        });
+        return Promise.all(promises).then<void>();
     }
 }

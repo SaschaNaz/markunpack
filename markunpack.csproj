@@ -20,12 +20,16 @@
   <ItemGroup>
     <Content Include="app.css" />
     <Content Include="index.html" />
+    <Content Include="markstyledark.css" />
+    <Content Include="markstylelight.css" />
     <Content Include="web.config" />
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="markunpack.ts" />
     <TypeScriptCompile Include="submodules\domliner\domliner.d.ts" />
     <TypeScriptCompile Include="submodules\es6-promise.d.ts" />
+    <TypeScriptCompile Include="submodules\extensions.ts" />
+    <TypeScriptCompile Include="submodules\highlight.d.ts" />
     <TypeScriptCompile Include="submodules\jszip.d.ts" />
     <TypeScriptCompile Include="submodules\marked.d.ts" />
     <TypeScriptCompile Include="submodules\prettify.d.ts" />

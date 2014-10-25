@@ -7,7 +7,7 @@
 */
 
 html {
-    background-color: #272822;
+    background-color: #23241f;
     color: #f8f8f2;
 }
 
@@ -16,6 +16,10 @@ body {
     max-width: 800px;
     width: calc(100% - 80px);
     font-family: sans-serif;
+}
+
+img {
+    max-width: 100%;
 }
 
 :not(pre) > code {
