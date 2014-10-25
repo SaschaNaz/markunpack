@@ -1,11 +1,5 @@
 ﻿/* Based on Monokai theme */
 
-/*
-    TODO: Replace current syntax highlighter by ported versions of Monokai themes for GitHub ATOM
-    https://github.com/kevinsawicki/monokai
-    https://github.com/rjfranco/monokai-light
-*/
-
 html {
     background-color: #23241f;
     color: #f8f8f2;
@@ -22,8 +16,27 @@ img {
     max-width: 100%;
 }
 
+blockquote {
+    font-style: italic;
+    color: #75715e;
+}
+
+table, th, td {
+    border: 1px solid #75715e;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+td {
+    padding: 10px;
+}
+
 :not(pre) > code {
     color: #66d9ef;
+}
+
+a {
+    color: #e6db74;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -37,6 +50,10 @@ li::marker {
 pre {
     padding: 10px;
 }
+
+    pre:not([hljs]) {
+        color: #66d9ef
+    }
 
 ::selection{ 
     background: #49483E;
