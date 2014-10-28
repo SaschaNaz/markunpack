@@ -26,11 +26,31 @@ var MarkUnpack;
         });
         return dom;
     }
+    function poppize(dom) {
+        Array.prototype.forEach.call(dom.getElementsByTagName("a"), function (a) {
+            a.target = "_blank";
+        });
+        return dom;
+    }
+    function insertImageDataURL(dom, resources) {
+        var promises = [];
+        Array.prototype.forEach.call(dom.querySelectorAll("img[src^='resources/']"), function (img) {
+            var resource = resources.file(img.getAttribute("src").replace(/^resources\//, ''));
+            if (resource)
+                promises.push(FileReaderExtensions.read(new Blob([resource.asArrayBuffer()]), "dataurl").then(function (dataurl) {
+                    img.src = dataurl;
+                }));
+        });
+        return Promise.all(promises).then();
+    }
 
     function markup(markdown, resources) {
         var markHTML = marked(markdown, { gfm: true });
         var dom = (new DOMParser()).parseFromString(markHTML, "text/html");
         highlightCodes(dom);
+        poppize(dom);
+        dom.head.appendChild(dom.createComment("Generated from Markdown document, by MarkUnpack: github.com/SaschaNaz/markunpack"));
+        dom.head.appendChild(DOMLiner.element("meta", { name: "viewport", content: "width=device-width" }));
 
         var sequence = Promise.resolve();
         if (resources)
@@ -38,9 +58,9 @@ var MarkUnpack;
                 return insertImageDataURL(dom, resources);
             });
         return sequence.then(function () {
-            return addStylesheet(dom, "monokai");
-        }).then(function () {
             return addStylesheet(dom, "markstyle");
+        }).then(function () {
+            return addStylesheet(dom, "monokai");
         }).then(function () {
             return dom.documentElement.innerHTML;
         });
@@ -61,17 +81,5 @@ var MarkUnpack;
         });
     }
     MarkUnpack.unpack = unpack;
-
-    function insertImageDataURL(dom, resources) {
-        var promises = [];
-        Array.prototype.forEach.call(dom.querySelectorAll("img[src^='resources/']"), function (img) {
-            var resource = resources.file(img.getAttribute("src").replace(/^resources\//, ''));
-            if (resource)
-                promises.push(FileReaderExtensions.read(new Blob([resource.asArrayBuffer()]), "dataurl").then(function (dataurl) {
-                    img.src = dataurl;
-                }));
-        });
-        return Promise.all(promises).then();
-    }
 })(MarkUnpack || (MarkUnpack = {}));
 //# sourceMappingURL=markunpack.js.map

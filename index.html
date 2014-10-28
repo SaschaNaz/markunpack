@@ -36,7 +36,11 @@
             sequence
                 .then(function (result) {
                     var newwindow = open();
-                    newwindow.document.documentElement.innerHTML = result;
+                    var newdoc = newwindow.document;
+                    newdoc.open();
+                    newdoc.write(result);
+                    newdoc.close();
+                    //newwindow.document.documentElement.innerHTML = result;
                 }).catch(function (error) { console.error(error.message); });
         }
         function getExtension(filename) {

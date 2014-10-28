@@ -1,5 +1,9 @@
 ﻿/* Based on Monokai theme */
 
+@-ms-viewport {
+    width: device-width;
+}
+
 html {
     background-color: #23241f;
     color: #f8f8f2;
@@ -8,7 +12,7 @@ html {
 body {
     margin: 40px auto 40px auto;
     max-width: 800px;
-    width: calc(100% - 80px);
+    width: calc(100% - 60px);
     font-family: sans-serif;
 }
 
@@ -19,6 +23,7 @@ img {
 blockquote {
     font-style: italic;
     color: #75715e;
+    margin-right: 20px;
 }
 
 table, th, td {
@@ -36,7 +41,7 @@ td {
 }
 
 a {
-    color: #e6db74;
+    color: #ae81ff;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -57,4 +62,10 @@ pre {
 
 ::selection{ 
     background: #49483E;
+}
+
+@media print {
+    .hljs {
+        word-wrap: break-word;
+    }
 }

@@ -25,18 +25,38 @@ module MarkUnpack {
             (code: HTMLElement) => hljs.highlightBlock(code));
         return dom;
     }
+    function poppize(dom: Document) {
+        Array.prototype.forEach.call(dom.getElementsByTagName("a"), (a: HTMLAnchorElement) => {
+            a.target = "_blank";
+        });
+        return dom;
+    }
+    function insertImageDataURL(dom: Document, resources: JSZip) {
+        var promises: Promise<void>[] = [];
+        Array.prototype.forEach.call(dom.querySelectorAll("img[src^='resources/']"), (img: HTMLImageElement) => {
+            var resource = resources.file(img.getAttribute("src").replace(/^resources\//, ''));
+            if (resource)
+                promises.push(
+                    FileReaderExtensions.read(new Blob([resource.asArrayBuffer()]), "dataurl")
+                        .then((dataurl) => { img.src = dataurl; }));
+        });
+        return Promise.all(promises).then<void>();
+    }
 
     function markup(markdown: string, resources?: JSZip) {
         var markHTML = marked(markdown, { gfm: true });
         var dom = (new DOMParser()).parseFromString(markHTML, "text/html")
         highlightCodes(dom);
+        poppize(dom);
+        dom.head.appendChild(dom.createComment("Generated from Markdown document, by MarkUnpack: github.com/SaschaNaz/markunpack"));
+        dom.head.appendChild(DOMLiner.element("meta", { name: "viewport", content: "width=device-width" }));
 
         var sequence = Promise.resolve<any>();
         if (resources)
             sequence = sequence.then(() => insertImageDataURL(dom, resources))
         return sequence
-            .then(() => addStylesheet(dom, "monokai"))
             .then(() => addStylesheet(dom, "markstyle"))
+            .then(() => addStylesheet(dom, "monokai"))
             .then(() => dom.documentElement.innerHTML);
     }
     export function unseal(blob: Blob): Promise<string> {
@@ -54,17 +74,5 @@ module MarkUnpack {
                     throw new Error("No index.md file in this markpack.");
                 return markup(main.asText(), jszip.folder("resources"));
             });
-    }
-
-    function insertImageDataURL(dom: Document, resources: JSZip) {
-        var promises: Promise<void>[] = [];
-        Array.prototype.forEach.call(dom.querySelectorAll("img[src^='resources/']"), (img: HTMLImageElement) => {
-            var resource = resources.file(img.getAttribute("src").replace(/^resources\//, ''));
-            if (resource)
-                promises.push(
-                    FileReaderExtensions.read(new Blob([resource.asArrayBuffer()]), "dataurl")
-                        .then((dataurl) => { img.src = dataurl; }));
-        });
-        return Promise.all(promises).then<void>();
     }
 }
