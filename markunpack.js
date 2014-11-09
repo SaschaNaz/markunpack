@@ -1,8 +1,7 @@
 ﻿/*
-* TODO:
-*
-* Use JSZip, replace local image URLs to blob URLs
-* Bootstrap?
+* Add save/open button for each documents
+* Save files in local storage
+* Style the main page
 */
 var MarkUnpack;
 (function (MarkUnpack) {
@@ -49,8 +48,9 @@ var MarkUnpack;
         var dom = (new DOMParser()).parseFromString(markHTML, "text/html");
         highlightCodes(dom);
         poppize(dom);
-        dom.head.appendChild(dom.createComment("Generated from Markdown document, by MarkUnpack: github.com/SaschaNaz/markunpack"));
+        dom.head.appendChild(DOMLiner.element("meta", { charset: "utf-8" }));
         dom.head.appendChild(DOMLiner.element("meta", { name: "viewport", content: "width=device-width" }));
+        dom.head.appendChild(dom.createComment("Generated from Markdown document, by MarkUnpack: github.com/SaschaNaz/markunpack"));
 
         var sequence = Promise.resolve();
         if (resources)

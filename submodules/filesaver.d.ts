@@ -1,0 +1,1 @@
+﻿declare function saveAs(data: Blob, filename: string): void; 
